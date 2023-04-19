@@ -52,7 +52,7 @@ namespace CodigoComun.Negocio
         }
 
 
-        public string EliminarArticulo(Articulo articuloAEliminar)
+        public string EliminarArticulo(int articuloAEliminar)
         {
             ArticuloRepository articuloRepository = new ArticuloRepository();
             int r = articuloRepository.DeleteArticuloDB(articuloAEliminar);

@@ -106,9 +106,9 @@ namespace CodigoComun.Repository
         }
 
 
-        public int DeleteArticuloDB(Articulo articuloAEliminar)
+        public int DeleteArticuloDB(int articuloAEliminar)
         {
-            string query = $"delete Articulos where id={articuloAEliminar.Id}";
+            string query = $"delete Articulos where id={articuloAEliminar}";
             try
             {
                 SqlCommand command = new SqlCommand(query);

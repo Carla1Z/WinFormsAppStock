@@ -41,11 +41,11 @@ namespace WinFormsAppStock.Vistas
         {
             int idArticuloEliminar = Convert.ToInt32(this.txtIdArticulo.Text);
 
-            Articulo articuloAuxiliar = new Articulo();
-            articuloAuxiliar.Id = idArticuloEliminar;
+            //Articulo articuloAuxiliar = new Articulo();
+            //articuloAuxiliar.Id = idArticuloEliminar;
 
             ArticuloServices articuloServices = new ArticuloServices();
-            string mensaje = articuloServices.EliminarArticulo(articuloAuxiliar);
+            string mensaje = articuloServices.EliminarArticulo(idArticuloEliminar);
 
             if (mensaje == "Articulo eliminado")
             {
