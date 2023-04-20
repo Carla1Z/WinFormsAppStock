@@ -39,9 +39,9 @@ namespace CodigoComun.Negocio
         }
 
 
-        public string EliminarDepositoSeleccionado(Deposito depositoAEliminar)
+        public string EliminarDepositoSeleccionado(int depositoAEliminar)
         {
-            int r = depositoRepository.EliminarDeposito(depositoAEliminar.Id);
+            int r = depositoRepository.EliminarDeposito(depositoAEliminar);
 
             if (r == 1)
             {

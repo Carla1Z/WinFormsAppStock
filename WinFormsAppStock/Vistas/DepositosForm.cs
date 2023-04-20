@@ -38,11 +38,11 @@ namespace WinFormsAppStock.Vistas
         {
             int idDepositoEliminar = Convert.ToInt32(this.txtIdDeposito.Text);
 
-            Deposito depositoAuxiliar = new Deposito();
-            depositoAuxiliar.Id = idDepositoEliminar;
+            //Deposito depositoAuxiliar = new Deposito();
+            //depositoAuxiliar.Id = idDepositoEliminar;
 
             DepositoServices services = new DepositoServices();
-            string mensaje = services.EliminarDepositoSeleccionado(depositoAuxiliar);
+            string mensaje = services.EliminarDepositoSeleccionado(idDepositoEliminar);
 
             if (mensaje == "Deposito eliminado")
             {
