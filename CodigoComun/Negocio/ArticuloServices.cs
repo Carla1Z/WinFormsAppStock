@@ -11,13 +11,11 @@ namespace CodigoComun.Negocio
 {
 	public class ArticuloServices
 	{
+		ArticuloRepository articuloRepository = new ArticuloRepository();
 		public ArticuloDTO AgregarArticulo(ArticuloDTO articuloDTOAAgregar)
 		{
 			try
 			{
-
-				ArticuloRepository articuloRepository = new ArticuloRepository();
-
 				//verifico antes de agregar articulo
 				Articulo articuloAuxiliar = articuloRepository.GetArticuloPorCodigo(articuloDTOAAgregar.Codigo);
 
@@ -46,43 +44,70 @@ namespace CodigoComun.Negocio
 			catch (Exception ex)
 			{
 				articuloDTOAAgregar.HuboError = true;
-				articuloDTOAAgregar.Mensaje = $"Hubo una excepción dando de alta el articulo {ex.Message}";
+				articuloDTOAAgregar.Mensaje = $"Hubo una excepción dando de alta el articulo: {ex.Message}";
 				return articuloDTOAAgregar;
 			}
 
 		}
 
-		public string ModificarArticulo(Articulo articuloAModificar)
+		public ArticuloDTO ModificarArticulo(ArticuloDTO articuloDTOAModificar)
 		{
-			ArticuloRepository articuloRepository = new ArticuloRepository();
-			int r = articuloRepository.UpdateArticuloDB(articuloAModificar);
+			try
+			{
+				Articulo articuloAuxiliar = articuloDTOAModificar.GetArticulo(articuloDTOAModificar);
 
-			if (r == 1)
-			{
-				return "Articulo Modificado";
+				int r = articuloRepository.UpdateArticuloDB(articuloAuxiliar);
+
+				if (r == 1)
+				{
+					articuloDTOAModificar.Mensaje = "Articulo Modificado";
+					return articuloDTOAModificar;
+				}
+				else
+				{
+					articuloDTOAModificar.Mensaje = "No se pudo modificar el articulo";
+					return articuloDTOAModificar;
+				}
 			}
-			else
+			catch (Exception ex)
 			{
-				return "No se pudo modificar el articulo";
+				articuloDTOAModificar.HuboError = true;
+				articuloDTOAModificar.Mensaje = $"Hubo una excepción modificando el articulo: {ex.Message}";
+				return articuloDTOAModificar;
 			}
+
 		}
 
 
-		public string EliminarArticulo(int articuloAEliminar)
+		public ArticuloDTO EliminarArticulo(int articuloAEliminar)
 		{
-			ArticuloRepository articuloRepository = new ArticuloRepository();
-			int r = articuloRepository.DeleteArticuloDB(articuloAEliminar);
-
-			if (r == 1)
+				ArticuloDTO articuloDTOEliminado = new ArticuloDTO();
+			try
 			{
-				return "Articulo eliminado";
+				int r = articuloRepository.DeleteArticuloDB(articuloAEliminar);
+				if (r == 1)
+				{
+					articuloDTOEliminado.Mensaje = "Articulo eliminado";
+					return articuloDTOEliminado;
+				}
+				else
+				{
+					articuloDTOEliminado.Mensaje = "No se pudo eliminar el articulo";
+					return articuloDTOEliminado;
+				}
 			}
-			else
+			catch (Exception ex)
 			{
-				return "No se pudo eliminar el articulo";
+				articuloDTOEliminado.HuboError = true;
+				articuloDTOEliminado.Mensaje = $"Hubo una excepción eliminando el articulo: {ex.Message}";
+				return articuloDTOEliminado;
 			}
 
 		}
+
+
 
 	}
+
+}
 }
