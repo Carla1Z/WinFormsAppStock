@@ -1,4 +1,5 @@
 ﻿using CodigoComun.Entities;
+using CodigoComun.Modelos.DTO;
 using CodigoComun.Repository;
 using System;
 using System.Collections.Generic;
@@ -12,18 +13,32 @@ namespace CodigoComun.Negocio
     {
         private DepositoRepository depositoRepository = new DepositoRepository();
 
-        public string AgregarDeposito(Deposito depositoAAgregar)
+        public DepositoDTO AgregarDeposito(DepositoDTO depositoDTOAAgregar)
         {
-            int r = depositoRepository.AddDeposito(depositoAAgregar);
+            try
+            {
+                Deposito deposito = depositoDTOAAgregar.GetDeposito(depositoDTOAAgregar);
 
-            if (r == 1)
+				int r = depositoRepository.AddDeposito(deposito);
+
+				if (r == 1)
+				{
+                    depositoDTOAAgregar.Mensaje = "Deposito Agregado";
+                    return depositoDTOAAgregar;
+				}
+				else
+				{
+                    depositoDTOAAgregar.Mensaje = "No se pudo agregar el deposito";
+                    return depositoDTOAAgregar;
+				}
+			}
+            catch (Exception ex)
             {
-                return "Deposito Agregado";
-            }
-            else
-            {
-                return "No se pudo agregar el deposito";
-            }
+                depositoDTOAAgregar.HuboError = true;
+                depositoDTOAAgregar.Mensaje = $"Hubo un excepción dando de alta el deposito: {ex.Message}";
+                return depositoDTOAAgregar;
+			}
+
         }
 
         public List<Deposito> TodosLosDepositos()

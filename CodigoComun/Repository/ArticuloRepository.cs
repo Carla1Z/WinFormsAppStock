@@ -72,8 +72,44 @@ namespace CodigoComun.Repository
             }
         }
 
+		public List<Articulo> GetTodosLosArticulos()
+		{
+			try
+			{
+				string select = "SELECT Id, Nombre, Precio,Marca,MinimoStock,Proveedor, Codigo FROM Articulos";
+				SqlCommand command = new SqlCommand(select);
+				DataTable dt = ac.execDT(command);
 
-        public int UpdateArticuloDB(Articulo articuloAActualizar)
+				if (dt.Rows.Count <= 0)
+				{
+					return null;
+				}
+
+				List<Articulo> articulos = new List<Articulo>();
+
+				foreach (DataRow row in dt.Rows)
+				{
+					Articulo articulo = new Articulo();
+					articulo.Id = Convert.ToInt32(row["Id"]);
+					articulo.Nombre = row["Nombre"].ToString();
+					articulo.Marca = row["Marca"].ToString();
+					articulo.MinimoStock = Convert.ToInt32(row["MinimoStock"]);
+					articulo.Proveedor = row["Proveedor"].ToString();
+					articulo.Precio = (float)Convert.ToDecimal(row["Precio"]);
+					articulo.Codigo = row["Codigo"].ToString();
+					articulos.Add(articulo);
+				}
+
+				return articulos;
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
+
+		public int UpdateArticuloDB(Articulo articuloAActualizar)
         {
             string minStockComaPorPunto = articuloAActualizar.MinimoStock.ToString();
             minStockComaPorPunto = minStockComaPorPunto.Replace(",", ".");

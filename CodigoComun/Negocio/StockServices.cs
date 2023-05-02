@@ -1,4 +1,6 @@
-﻿using CodigoComun.Entities;
+﻿using AutoMapper;
+using CodigoComun.Entities;
+using CodigoComun.Modelos.DTO;
 using CodigoComun.Repository;
 using System;
 using System.Collections.Generic;
@@ -8,68 +10,116 @@ using System.Threading.Tasks;
 
 namespace CodigoComun.Negocio
 {
-    public class StockServices
-    {
-        private StockRepository stockRepository = new StockRepository();
+	public class StockServices
+	{
+		private StockRepository stockRepository = new StockRepository();
 
-        public string AgregarStock(Stock stockAAgregar)
-        {
-            StockRepository repository = new StockRepository();
-            int r = repository.AddStock(stockAAgregar);
+		public StockDTO AgregarStock(StockDTO stockDTOAAgregar)
+		{
+			try
+			{
+				Stock stock = stockDTOAAgregar.GetStock(stockDTOAAgregar);
+				int r = stockRepository.AddStock(stock);
 
-            if (r == 1)
-            {
-                return "Stock Agregado";
-            }
-            else
-            {
-                return "No se pudo agregar el stock";
-            }
-        }
+				if (r == 1)
+				{
+					stockDTOAAgregar.Mensaje = "Stock Agregado";
+					return stockDTOAAgregar;
+				}
+				else
+				{
+					stockDTOAAgregar.HuboError = true;
+					stockDTOAAgregar.Mensaje = "No se pudo agregar el stock";
+					return stockDTOAAgregar;
+				}
+			}
+			catch (Exception ex)
+			{
+				stockDTOAAgregar.HuboError = true;
+				stockDTOAAgregar.Mensaje = $"Hubo un excepción dando de alta el stock: {ex.Message}";
+				return stockDTOAAgregar;
+			}
 
-        public List<Stock> TodosLosStocks()
-        {
-            return stockRepository.GetTodosStocks();
-        }
-
-        public Stock stockPorId(int idStock)
-        {
-            Stock stockEnDB = stockRepository.GetStockPorId(idStock);
-            return stockEnDB;
-        }
-
-
-        public string EliminarStockSeleccionado(Stock stockAEliminar)
-        {
-            int r = stockRepository.EliminarStock(stockAEliminar.Id);
-
-            if (r == 1)
-            {
-                return "Stock eliminado";
-            }
-            else
-            {
-                return "No se pudo eliminar el stock";
-            }
-        }
+		}
 
 
-        public string ModificarStock(Stock stockAModificar)
-        {
-            int r = stockRepository.ActualizarStock(stockAModificar);
+		public StockDTO EliminarStockSeleccionado(StockDTO stockAEliminar)
+		{
+			try
+			{
+				int r = stockRepository.EliminarStock(stockAEliminar.Id);
 
-            if (r == 1)
-            {
-                return "Stock Modificado";
-            }
-            else
-            {
-                return "No se pudo modificar el Stock";
-            }
+				if (r == 1)
+				{
+					stockAEliminar.Mensaje = "Stock eliminado";
+					return stockAEliminar;
+				}
+				else
+				{
+					stockAEliminar.Mensaje = "No se pudo eliminar el stock";
+					return stockAEliminar;
+				}
+			}
+			catch (Exception ex)
+			{
+				stockAEliminar.HuboError = true;
+				stockAEliminar.Mensaje = $"Hubo un excepción eliminar el stock: {ex.Message}";
+				return stockAEliminar;
+			}
 
-        }
+		}
 
 
+		public StockDTO ModificarStock(StockDTO stockAModificar)
+		{
+			try
+			{
+				Stock stock = stockAModificar.GetStock(stockAModificar);
+				int r = stockRepository.ActualizarStock(stock);
 
-    }
+				if (r == 1)
+				{
+					stockAModificar.Mensaje = "Stock Modificado";
+					return stockAModificar;
+				}
+				else
+				{
+					stockAModificar.Mensaje = "No se pudo modificar el Stock";
+					return stockAModificar;
+				}
+			}
+			catch (Exception ex)
+			{
+				stockAModificar.HuboError = true;
+				stockAModificar.Mensaje = $"Hubo un excepción modificando el stock: {ex.Message}";
+				return stockAModificar;
+			}
+
+
+		}
+
+		public List<StockDTO> TodosLosStocks()
+		{
+			var config = new MapperConfiguration(cfg => cfg.CreateMap<Stock, StockDTO>());
+			var mapper = new Mapper(config);
+
+			List<Stock> stocks = stockRepository.GetTodosStocks();
+
+			List<StockDTO> stockDTOs = new List<StockDTO>();
+			foreach (Stock stock in stocks)
+			{
+				stockDTOs.Add(mapper.Map<StockDTO>(stock));
+			}
+
+			return stockDTOs;
+		}
+
+
+		public Stock stockPorId(int idStock)
+		{
+			Stock stockEnDB = stockRepository.GetStockPorId(idStock);
+			return stockEnDB;
+		}
+
+	}
 }
