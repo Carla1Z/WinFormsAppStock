@@ -108,6 +108,43 @@ namespace CodigoComun.Repository
 			}
 		}
 
+		public Articulo GetArticuloPorId(int articuloId)
+		{
+			try
+			{
+				string select = $"select * from Articulos where id={articuloId}";
+				SqlCommand command = new SqlCommand(select);
+				DataTable dt = ac.execDT(command);
+
+
+				if (dt.Rows.Count <= 0)
+				{
+					return null;
+				}
+
+				Articulo articuloADevolverConDatosDeLaBD = new Articulo();
+				foreach (DataRow dr in dt.Rows)
+				{
+					articuloADevolverConDatosDeLaBD.Id = Convert.ToInt32(dr["Id"]);
+					articuloADevolverConDatosDeLaBD.Nombre = dr["Nombre"].ToString();
+					articuloADevolverConDatosDeLaBD.Marca = dr["Marca"].ToString();
+					articuloADevolverConDatosDeLaBD.MinimoStock = Convert.ToDecimal(dr["MinimoStock"]);
+					articuloADevolverConDatosDeLaBD.Proveedor = dr["Proveedor"].ToString();
+					articuloADevolverConDatosDeLaBD.Precio = (float)Convert.ToDecimal(dr["Precio"]);
+					articuloADevolverConDatosDeLaBD.Codigo = dr["Codigo"].ToString();
+				}
+
+				return articuloADevolverConDatosDeLaBD;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+			finally
+			{
+				ac.DesConectar();
+			}
+		}
 
 		public int UpdateArticuloDB(Articulo articuloAActualizar)
         {

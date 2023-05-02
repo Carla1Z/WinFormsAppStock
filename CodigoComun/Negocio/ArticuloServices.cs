@@ -50,6 +50,34 @@ namespace CodigoComun.Negocio
 
 		}
 
+		public ArticuloDTO ArticuloPorId(int articuloDTOId)
+		{
+			ArticuloDTO articuloDTO = new ArticuloDTO();
+			try
+			{
+				Articulo articuloEncontrado = articuloRepository.GetArticuloPorId(articuloDTOId);
+
+				if (articuloEncontrado != null)
+				{
+					int idArticulo = articuloEncontrado.Id;
+					articuloDTO.Mensaje = "Mostrar articulo";
+					return articuloDTO;
+				}
+				else
+				{
+					articuloDTO.Mensaje = "No se pudo mostrar el articulo";
+					return articuloDTO;
+				}
+			}
+			catch (Exception ex)
+			{
+				articuloDTO.HuboError = true;
+				articuloDTO.Mensaje = $"Hubo una excepción mostrando el articulo: {ex.Message}";
+				return articuloDTO;
+			}
+		}
+
+
 		public ArticuloDTO ModificarArticulo(ArticuloDTO articuloDTOAModificar)
 		{
 			try
@@ -81,7 +109,7 @@ namespace CodigoComun.Negocio
 
 		public ArticuloDTO EliminarArticulo(int articuloAEliminar)
 		{
-				ArticuloDTO articuloDTOEliminado = new ArticuloDTO();
+			ArticuloDTO articuloDTOEliminado = new ArticuloDTO();
 			try
 			{
 				int r = articuloRepository.DeleteArticuloDB(articuloAEliminar);
@@ -109,5 +137,4 @@ namespace CodigoComun.Negocio
 
 	}
 
-}
 }
