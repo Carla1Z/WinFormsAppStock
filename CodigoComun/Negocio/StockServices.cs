@@ -14,6 +14,7 @@ namespace CodigoComun.Negocio
 	{
 		private StockRepository stockRepository = new StockRepository();
 		private List<StockDTO> stockDTOs = new List<StockDTO>();
+		private StockDTO stock = new StockDTO();
 
 		public StockDTO AgregarStock(StockDTO stockDTOAAgregar)
 		{
@@ -70,10 +71,31 @@ namespace CodigoComun.Negocio
 			return stockDTOs;
 		}
 
-		public Stock stockPorId(int idStock)
+		public StockDTO stockPorId(int idDTOStock)
 		{
-			Stock stockEnDB = stockRepository.GetStockPorId(idStock);
-			return stockEnDB;
+			try
+			{
+				Stock stockEncontrado = stockRepository.GetStockPorId(idDTOStock);
+
+				if (stockEncontrado != null)
+				{
+					int idStock = stockEncontrado.Id;
+					stock.Mensaje = "Mostrar stock";
+					return stock;
+				}
+				else
+				{
+					stock.Mensaje = "No se pudo mostrar el stock";
+					return stock;
+				}
+
+			}
+			catch (Exception ex)
+			{
+				stock.HuboError = true;
+				stock.Mensaje = $"Hubo una excepción al mostrar el stock: {ex.Message}";
+				return stock;
+			}
 		}
 
 		public StockDTO ModificarStock(StockDTO stockAModificar)
