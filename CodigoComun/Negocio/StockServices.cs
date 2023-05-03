@@ -13,6 +13,7 @@ namespace CodigoComun.Negocio
 	public class StockServices
 	{
 		private StockRepository stockRepository = new StockRepository();
+		private List<StockDTO> stockDTOs = new List<StockDTO>();
 
 		public StockDTO AgregarStock(StockDTO stockDTOAAgregar)
 		{
@@ -42,33 +43,38 @@ namespace CodigoComun.Negocio
 
 		}
 
-
-		public StockDTO EliminarStockSeleccionado(StockDTO stockAEliminar)
+		public List<StockDTO> TodosLosStocks()
 		{
 			try
 			{
-				int r = stockRepository.EliminarStock(stockAEliminar.Id);
+				List<Stock> stocks = stockRepository.GetTodosStocks();
 
-				if (r == 1)
+				foreach (Stock stock in stocks)
 				{
-					stockAEliminar.Mensaje = "Stock eliminado";
-					return stockAEliminar;
+					StockDTO stockDTO = new StockDTO();
+					stockDTO.GetStock(stockDTO);
 				}
-				else
-				{
-					stockAEliminar.Mensaje = "No se pudo eliminar el stock";
-					return stockAEliminar;
-				}
+
 			}
 			catch (Exception ex)
 			{
-				stockAEliminar.HuboError = true;
-				stockAEliminar.Mensaje = $"Hubo un excepción eliminar el stock: {ex.Message}";
-				return stockAEliminar;
+				stockDTOs = new List<StockDTO>()
+				{
+					new StockDTO()
+					{
+						HuboError= true,
+						Mensaje= $"Hubo error al mostrar los stocks: {ex.Message}"
+					}
+				};
 			}
-
+			return stockDTOs;
 		}
 
+		public Stock stockPorId(int idStock)
+		{
+			Stock stockEnDB = stockRepository.GetStockPorId(idStock);
+			return stockEnDB;
+		}
 
 		public StockDTO ModificarStock(StockDTO stockAModificar)
 		{
@@ -98,28 +104,32 @@ namespace CodigoComun.Negocio
 
 		}
 
-		public List<StockDTO> TodosLosStocks()
+		public StockDTO EliminarStockSeleccionado(StockDTO stockAEliminar)
 		{
-			var config = new MapperConfiguration(cfg => cfg.CreateMap<Stock, StockDTO>());
-			var mapper = new Mapper(config);
-
-			List<Stock> stocks = stockRepository.GetTodosStocks();
-
-			List<StockDTO> stockDTOs = new List<StockDTO>();
-			foreach (Stock stock in stocks)
+			try
 			{
-				stockDTOs.Add(mapper.Map<StockDTO>(stock));
+				int r = stockRepository.EliminarStock(stockAEliminar.Id);
+
+				if (r == 1)
+				{
+					stockAEliminar.Mensaje = "Stock eliminado";
+					return stockAEliminar;
+				}
+				else
+				{
+					stockAEliminar.Mensaje = "No se pudo eliminar el stock";
+					return stockAEliminar;
+				}
+			}
+			catch (Exception ex)
+			{
+				stockAEliminar.HuboError = true;
+				stockAEliminar.Mensaje = $"Hubo un excepción eliminar el stock: {ex.Message}";
+				return stockAEliminar;
 			}
 
-			return stockDTOs;
 		}
 
-
-		public Stock stockPorId(int idStock)
-		{
-			Stock stockEnDB = stockRepository.GetStockPorId(idStock);
-			return stockEnDB;
-		}
 
 	}
 }
