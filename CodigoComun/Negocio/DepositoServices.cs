@@ -121,17 +121,29 @@ namespace CodigoComun.Negocio
 			}
 		}
 
-		public string EliminarDepositoSeleccionado(int depositoAEliminar)
+		public DepositoDTO EliminarDepositoSeleccionado(int depositoDTOAEliminar)
 		{
-			int r = depositoRepository.EliminarDeposito(depositoAEliminar);
+			try
+			{
+				int r = depositoRepository.EliminarDeposito(depositoDTOAEliminar);
 
-			if (r == 1)
-			{
-				return "Deposito eliminado";
+				if (r == 1)
+				{
+					deposito.Mensaje = "Deposito eliminado";
+					return deposito;
+				}
+				else
+				{
+					deposito.Mensaje = "No se pudo eliminar el deposito";
+					return deposito;
+				}
+
 			}
-			else
+			catch (Exception ex)
 			{
-				return "No se pudo eliminar el deposito";
+				deposito.HuboError = true;
+				deposito.Mensaje = $"Hubo una excepción al eliminar el deposito: {ex.Message}";
+				return deposito;
 			}
 		}
 
