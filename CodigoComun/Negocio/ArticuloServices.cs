@@ -1,4 +1,5 @@
-﻿using CodigoComun.Modelos;
+﻿using AutoMapper;
+using CodigoComun.Modelos;
 using CodigoComun.Modelos.DTO;
 using CodigoComun.Repository;
 using System;
@@ -50,6 +51,35 @@ namespace CodigoComun.Negocio
 
 		}
 
+		public List<ArticuloDTO> TodosLosArticulos()
+		{
+			List<ArticuloDTO> articuloDTOs = new List<ArticuloDTO>();
+			try
+			{
+				List<Articulo> articulos = articuloRepository.GetTodosLosArticulos();
+				foreach (Articulo articulo in articulos)
+				{
+					ArticuloDTO articuloDTO = new ArticuloDTO();
+					articuloDTO.GetArticulo(articuloDTO);
+				}
+			}
+			catch (Exception ex)
+			{
+				articuloDTOs = new List<ArticuloDTO>()
+				{
+					new ArticuloDTO()
+						{
+						HuboError = true,
+						Mensaje = $"Hubo un error al mostrar los articulos: {ex.Message}"
+						}
+				};
+			}
+
+			return articuloDTOs;
+		}
+
+
+
 		public ArticuloDTO ArticuloPorId(int articuloDTOId)
 		{
 			ArticuloDTO articuloDTO = new ArticuloDTO();
@@ -76,7 +106,6 @@ namespace CodigoComun.Negocio
 				return articuloDTO;
 			}
 		}
-
 
 		public ArticuloDTO ModificarArticulo(ArticuloDTO articuloDTOAModificar)
 		{
@@ -105,7 +134,6 @@ namespace CodigoComun.Negocio
 			}
 
 		}
-
 
 		public ArticuloDTO EliminarArticulo(int articuloAEliminar)
 		{
