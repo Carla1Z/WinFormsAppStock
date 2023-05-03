@@ -13,6 +13,7 @@ namespace CodigoComun.Negocio
 	{
 		private DepositoRepository depositoRepository = new DepositoRepository();
 		List<DepositoDTO> depositoDTOs = new List<DepositoDTO>();
+		DepositoDTO deposito = new DepositoDTO();
 		public DepositoDTO AgregarDeposito(DepositoDTO depositoDTOAAgregar)
 		{
 			try
@@ -66,11 +67,31 @@ namespace CodigoComun.Negocio
 			return depositoDTOs;
 		}
 
-		public Deposito depositoPorId(int idDeposito)
+		public DepositoDTO depositoPorId(int idDepositoDTO)
 		{
-			DepositoRepository repository = new DepositoRepository();
-			Deposito depositoEnDB = repository.GetDepositoPorId(idDeposito);
-			return depositoEnDB;
+			try
+			{
+				Deposito depositoEncontrado = depositoRepository.GetDepositoPorId(idDepositoDTO);
+
+				if (depositoEncontrado !=null)
+				{
+					int idDeposito = depositoEncontrado.Id;
+					deposito.Mensaje = "Mostrar deposito";
+					return deposito;
+				}
+				else
+				{
+					deposito.Mensaje = "No se pudo mostrar el deposito";
+					return deposito;
+				}
+
+			}
+			catch (Exception ex)
+			{
+				deposito.HuboError = true;
+				deposito.Mensaje = $"Hubo una excepción al mostrar el deposito: {ex.Message}";
+				return deposito;
+			}
 		}
 
 
