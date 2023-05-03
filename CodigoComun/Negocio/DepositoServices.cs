@@ -9,82 +9,102 @@ using System.Threading.Tasks;
 
 namespace CodigoComun.Negocio
 {
-    public class DepositoServices
-    {
-        private DepositoRepository depositoRepository = new DepositoRepository();
-
-        public DepositoDTO AgregarDeposito(DepositoDTO depositoDTOAAgregar)
-        {
-            try
-            {
-                Deposito deposito = depositoDTOAAgregar.GetDeposito(depositoDTOAAgregar);
+	public class DepositoServices
+	{
+		private DepositoRepository depositoRepository = new DepositoRepository();
+		List<DepositoDTO> depositoDTOs = new List<DepositoDTO>();
+		public DepositoDTO AgregarDeposito(DepositoDTO depositoDTOAAgregar)
+		{
+			try
+			{
+				Deposito deposito = depositoDTOAAgregar.GetDeposito(depositoDTOAAgregar);
 
 				int r = depositoRepository.AddDeposito(deposito);
 
 				if (r == 1)
 				{
-                    depositoDTOAAgregar.Mensaje = "Deposito Agregado";
-                    return depositoDTOAAgregar;
+					depositoDTOAAgregar.Mensaje = "Deposito Agregado";
+					return depositoDTOAAgregar;
 				}
 				else
 				{
-                    depositoDTOAAgregar.Mensaje = "No se pudo agregar el deposito";
-                    return depositoDTOAAgregar;
+					depositoDTOAAgregar.Mensaje = "No se pudo agregar el deposito";
+					return depositoDTOAAgregar;
 				}
 			}
-            catch (Exception ex)
-            {
-                depositoDTOAAgregar.HuboError = true;
-                depositoDTOAAgregar.Mensaje = $"Hubo un excepción dando de alta el deposito: {ex.Message}";
-                return depositoDTOAAgregar;
+			catch (Exception ex)
+			{
+				depositoDTOAAgregar.HuboError = true;
+				depositoDTOAAgregar.Mensaje = $"Hubo un excepción dando de alta el deposito: {ex.Message}";
+				return depositoDTOAAgregar;
 			}
 
-        }
+		}
 
-        public List<Deposito> TodosLosDepositos()
-        {
-            return depositoRepository.GetTodosLosDepositos();
-        }
+		public List<DepositoDTO> TodosLosDepositos()
+		{
+			try
+			{
+				List<Deposito> depositos = depositoRepository.GetTodosLosDepositos();
+				foreach (var deposito in depositos)
+				{
+					DepositoDTO depositoDTO = new DepositoDTO();
+					depositoDTO.GetDeposito(depositoDTO);
+				}
+			}
+			catch (Exception ex)
+			{
+				depositoDTOs = new List<DepositoDTO>()
+				{
+					new DepositoDTO()
+					{
+						HuboError = true,
+						Mensaje = $"Hubo un error al mostrar los depositos {ex.Message}"
+					}
+				};
+			}
+			return depositoDTOs;
+		}
 
-        public Deposito depositoPorId(int idDeposito)
-        {
-            DepositoRepository repository = new DepositoRepository();
-            Deposito depositoEnDB = repository.GetDepositoPorId(idDeposito);
-            return depositoEnDB;
-        }
+		public Deposito depositoPorId(int idDeposito)
+		{
+			DepositoRepository repository = new DepositoRepository();
+			Deposito depositoEnDB = repository.GetDepositoPorId(idDeposito);
+			return depositoEnDB;
+		}
 
 
-        public string EliminarDepositoSeleccionado(int depositoAEliminar)
-        {
-            int r = depositoRepository.EliminarDeposito(depositoAEliminar);
+		public string EliminarDepositoSeleccionado(int depositoAEliminar)
+		{
+			int r = depositoRepository.EliminarDeposito(depositoAEliminar);
 
-            if (r == 1)
-            {
-                return "Deposito eliminado";
-            }
-            else
-            {
-                return "No se pudo eliminar el deposito";
-            }
-        }
+			if (r == 1)
+			{
+				return "Deposito eliminado";
+			}
+			else
+			{
+				return "No se pudo eliminar el deposito";
+			}
+		}
 
 
-        public string ModificarDeposito(Deposito depositoAModificar)
-        {
-            DepositoRepository repository = new DepositoRepository();
+		public string ModificarDeposito(Deposito depositoAModificar)
+		{
+			DepositoRepository repository = new DepositoRepository();
 
-            int r = repository.UpdateDeposito(depositoAModificar);
+			int r = repository.UpdateDeposito(depositoAModificar);
 
-            if (r == 1)
-            {
-                return "Deposito Modificado";
-            }
-            else
-            {
-                return "No se pudo modificar el Deposito";
-            }
+			if (r == 1)
+			{
+				return "Deposito Modificado";
+			}
+			else
+			{
+				return "No se pudo modificar el Deposito";
+			}
 
-        }
+		}
 
-    }
+	}
 }

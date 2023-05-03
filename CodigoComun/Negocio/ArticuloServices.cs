@@ -78,8 +78,6 @@ namespace CodigoComun.Negocio
 			return articuloDTOs;
 		}
 
-
-
 		public ArticuloDTO ArticuloPorId(int articuloDTOId)
 		{
 			ArticuloDTO articuloDTO = new ArticuloDTO();
@@ -160,8 +158,6 @@ namespace CodigoComun.Negocio
 			}
 
 		}
-
-
 
 	}
 
