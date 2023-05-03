@@ -93,7 +93,33 @@ namespace CodigoComun.Negocio
 				return deposito;
 			}
 		}
+		
+		public DepositoDTO ModificarDeposito(DepositoDTO depositoDTOAModificar)
+		{
+			try
+			{
+				Deposito depositoAuxiliar = depositoDTOAModificar.GetDeposito(depositoDTOAModificar);
+				int r = depositoRepository.UpdateDeposito(depositoAuxiliar);
 
+				if (r == 1)
+				{
+					depositoDTOAModificar.Mensaje = "Deposito Modificado";
+					return depositoDTOAModificar;
+				}
+				else
+				{
+					depositoDTOAModificar.Mensaje = "No se pudo modificar el Deposito";
+					return depositoDTOAModificar;
+				}
+
+			}
+			catch (Exception ex)
+			{
+				depositoDTOAModificar.HuboError = true;
+				depositoDTOAModificar.Mensaje = $"Hubo una excepción modificando el deposito: {ex.Message}";
+				return depositoDTOAModificar;
+			}
+		}
 
 		public string EliminarDepositoSeleccionado(int depositoAEliminar)
 		{
@@ -109,23 +135,6 @@ namespace CodigoComun.Negocio
 			}
 		}
 
-
-		public string ModificarDeposito(Deposito depositoAModificar)
-		{
-			DepositoRepository repository = new DepositoRepository();
-
-			int r = repository.UpdateDeposito(depositoAModificar);
-
-			if (r == 1)
-			{
-				return "Deposito Modificado";
-			}
-			else
-			{
-				return "No se pudo modificar el Deposito";
-			}
-
-		}
 
 	}
 }
