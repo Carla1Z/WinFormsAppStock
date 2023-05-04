@@ -52,8 +52,7 @@ namespace CodigoComun.Negocio
 
 				foreach (Stock stock in stocks)
 				{
-					StockDTO stockDTO = new StockDTO();
-					stockDTO.GetStock(stockDTO);
+					stockDTOs.Add(stock.GetStockDTO(stock));
 				}
 
 			}

@@ -17,6 +17,7 @@ namespace CodigoComun.Modelos.DTO
 		public ArticuloDTO Articulo { get; set; }
 		public DepositoDTO Deposito { get; set; }
 
+		public StockDTO() { }
 
 		public Stock GetStock(StockDTO stockDTO)
 		{
