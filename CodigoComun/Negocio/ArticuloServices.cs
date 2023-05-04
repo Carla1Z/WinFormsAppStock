@@ -85,23 +85,22 @@ namespace CodigoComun.Negocio
 
 				if (articuloEncontrado != null)
 				{
-					int idArticulo = articuloEncontrado.Id;
+					articuloDTO = articuloEncontrado.GetArticuloDTO(articuloEncontrado);
 					articuloDTO.Mensaje = "Mostrar articulo";
-					return articuloDTO;
 				}
 				else
 				{
 					articuloDTO.Mensaje = "No se pudo mostrar el articulo";
-					return articuloDTO;
 				}
 			}
 			catch (Exception ex)
 			{
 				articuloDTO.HuboError = true;
 				articuloDTO.Mensaje = $"Hubo una excepción mostrando el articulo: {ex.Message}";
-				return articuloDTO;
 			}
+			return articuloDTO;
 		}
+
 
 		public ArticuloDTO ModificarArticulo(ArticuloDTO articuloDTOAModificar)
 		{
