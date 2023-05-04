@@ -1,4 +1,5 @@
 ﻿using CodigoComun.Entities;
+using CodigoComun.Modelos;
 using CodigoComun.Modelos.DTO;
 using CodigoComun.Repository;
 using System;
@@ -49,8 +50,7 @@ namespace CodigoComun.Negocio
 				List<Deposito> depositos = depositoRepository.GetTodosLosDepositos();
 				foreach (var deposito in depositos)
 				{
-					DepositoDTO depositoDTO = new DepositoDTO();
-					depositoDTO.GetDeposito(depositoDTO);
+					depositoDTOs.Add(deposito.GetDepositoDTO(deposito));
 				}
 			}
 			catch (Exception ex)

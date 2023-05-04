@@ -1,4 +1,6 @@
-﻿using CodigoComun.Datos;
+﻿using AutoMapper;
+using CodigoComun.Datos;
+using CodigoComun.Modelos.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,50 +30,13 @@ namespace CodigoComun.Modelos
 
         }
 
+		public ArticuloDTO GetArticuloDTO(Articulo articulo)
+		{
+			var config = new MapperConfiguration(cfg => cfg.CreateMap<Articulo, ArticuloDTO>());
+			var mapper = new Mapper(config);
+			ArticuloDTO articuloDTOADevolver = mapper.Map<ArticuloDTO>(articulo);
+			return articuloDTOADevolver;
+		}
 
-        //public List<Articulo> GetTodosLosArticulos()
-        //{
-        //    try
-        //    {
-        //        string select = $"select * from Articulos ";
-        //        SqlCommand command = new SqlCommand(select);
-        //        DataTable dt = ac.execDT(command);
-
-        //        if (dt.Rows.Count <= 0)
-        //        {
-        //            return null;
-        //        }
-
-        //        List<Articulo> articulosADevolverConDatosDeLaBD = new List<Articulo>();
-        //        foreach (DataRow dr in dt.Rows)
-        //        {
-        //            Articulo ArticuloAuxiliar = new Articulo();
-        //            ArticuloAuxiliar.Id = Convert.ToInt32(dr["Id"]);
-        //            ArticuloAuxiliar.Nombre = dr["Nombre"].ToString();
-        //            ArticuloAuxiliar.Marca = dr["Marca"].ToString();
-        //            ArticuloAuxiliar.MinimoStock = Convert.ToDecimal(dr["MinimoStock"]);
-        //            ArticuloAuxiliar.Proveedor = dr["Proveedor"].ToString();
-        //            ArticuloAuxiliar.Precio = (float)Convert.ToDecimal(dr["Precio"]);
-        //            ArticuloAuxiliar.Codigo = dr["Codigo"].ToString();
-        //            //agrego a la lista
-        //            articulosADevolverConDatosDeLaBD.Add(ArticuloAuxiliar);
-        //        }
-
-        //        return articulosADevolverConDatosDeLaBD;
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        return null;
-        //    }
-        //    finally
-        //    {
-        //        ac.DesConectar();
-        //    }
-        //}
-
-
-
-
-    }
+	}
 }

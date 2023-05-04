@@ -57,24 +57,22 @@ namespace CodigoComun.Negocio
 			try
 			{
 				List<Articulo> articulos = articuloRepository.GetTodosLosArticulos();
-				foreach (Articulo articulo in articulos)
+				foreach (var articulo in articulos)
 				{
-					ArticuloDTO articuloDTO = new ArticuloDTO();
-					articuloDTO.GetArticulo(articuloDTO);
+					articuloDTOs.Add(articulo.GetArticuloDTO(articulo));
 				}
 			}
 			catch (Exception ex)
 			{
 				articuloDTOs = new List<ArticuloDTO>()
-				{
-					new ArticuloDTO()
-						{
-						HuboError = true,
-						Mensaje = $"Hubo un error al mostrar los articulos: {ex.Message}"
-						}
-				};
+		{
+			new ArticuloDTO()
+			{
+				HuboError = true,
+				Mensaje = $"Hubo un error al mostrar los articulos: {ex.Message}"
 			}
-
+		};
+			}
 			return articuloDTOs;
 		}
 

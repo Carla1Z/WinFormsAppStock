@@ -15,6 +15,8 @@ namespace CodigoComun.Modelos.DTO
 		public string Nombre { get; set; }
 		public string Direccion { get; set; }
 
+		public DepositoDTO() { }
+
 		public Deposito GetDeposito(DepositoDTO depositoDTO)
 		{
 			var config = new MapperConfiguration(cfg => cfg.CreateMap<DepositoDTO, Deposito>());

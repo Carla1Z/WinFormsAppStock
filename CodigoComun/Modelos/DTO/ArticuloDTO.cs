@@ -17,6 +17,7 @@ namespace CodigoComun.Modelos.DTO
 		public float Precio { get; set; }
 		public string Codigo { get; set; }
 
+		public ArticuloDTO() { }
 
 		public Articulo GetArticulo(ArticuloDTO articuloDTO)
 		{
