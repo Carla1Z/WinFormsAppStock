@@ -75,16 +75,14 @@ namespace CodigoComun.Negocio
 
 				if (depositoEncontrado !=null)
 				{
-					int idDeposito = depositoEncontrado.Id;
+					deposito = depositoEncontrado.GetDepositoDTO(depositoEncontrado);
 					deposito.Mensaje = "Mostrar deposito";
-					return deposito;
 				}
 				else
 				{
 					deposito.Mensaje = "No se pudo mostrar el deposito";
-					return deposito;
 				}
-
+				return deposito;
 			}
 			catch (Exception ex)
 			{
