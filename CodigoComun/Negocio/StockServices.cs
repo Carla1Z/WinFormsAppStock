@@ -78,16 +78,14 @@ namespace CodigoComun.Negocio
 
 				if (stockEncontrado != null)
 				{
-					int idStock = stockEncontrado.Id;
+					stock = stockEncontrado.GetStockDTO(stockEncontrado);
 					stock.Mensaje = "Mostrar stock";
-					return stock;
 				}
 				else
 				{
 					stock.Mensaje = "No se pudo mostrar el stock";
-					return stock;
 				}
-
+				return stock;
 			}
 			catch (Exception ex)
 			{
