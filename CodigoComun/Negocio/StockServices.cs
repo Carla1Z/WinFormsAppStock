@@ -123,28 +123,28 @@ namespace CodigoComun.Negocio
 
 		}
 
-		public StockDTO EliminarStockSeleccionado(StockDTO stockAEliminar)
+		public StockDTO EliminarStockSeleccionado(int stockAEliminar)
 		{
 			try
 			{
-				int r = stockRepository.EliminarStock(stockAEliminar.Id);
+				int r = stockRepository.EliminarStock(stockAEliminar);
 
 				if (r == 1)
 				{
-					stockAEliminar.Mensaje = "Stock eliminado";
-					return stockAEliminar;
+					stock.Mensaje = "Stock eliminado";
+					return stock;
 				}
 				else
 				{
-					stockAEliminar.Mensaje = "No se pudo eliminar el stock";
-					return stockAEliminar;
+					stock.Mensaje = "No se pudo eliminar el stock";
+					return stock;
 				}
 			}
 			catch (Exception ex)
 			{
-				stockAEliminar.HuboError = true;
-				stockAEliminar.Mensaje = $"Hubo un excepción eliminar el stock: {ex.Message}";
-				return stockAEliminar;
+				stock.HuboError = true;
+				stock.Mensaje = $"Hubo un excepción eliminar el stock: {ex.Message}";
+				return stock;
 			}
 
 		}
