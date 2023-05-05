@@ -19,6 +19,17 @@ namespace CodigoComun.Negocio
 		{
 			try
 			{
+				//verifico antes de agregar el Deposito
+				Deposito depositoAuxiliar = depositoRepository.GetDepositoPorNombre(depositoDTOAAgregar.Nombre);
+
+				if (depositoAuxiliar != null)
+				{
+					depositoDTOAAgregar.HuboError = true;
+					depositoDTOAAgregar.Mensaje = $"Ya existe un deposito con el Nombre: {depositoDTOAAgregar.Nombre}";
+					return depositoDTOAAgregar;
+				}
+
+
 				Deposito deposito = depositoDTOAAgregar.GetDeposito(depositoDTOAAgregar);
 
 				int r = depositoRepository.AddDeposito(deposito);

@@ -1,6 +1,8 @@
 ﻿using CodigoComun.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,8 +37,13 @@ namespace CodigoComun.Repository
             return r;
         }
 
+		public Deposito GetDepositoPorNombre(string nombreABuscar)
+		{
+			Deposito depositoNombre = db.Depositos.Where(p => p.Nombre == nombreABuscar).FirstOrDefault();
+            return depositoNombre;
+		}
 
-        public int AddDeposito(Deposito depositoAAgregar)
+		public int AddDeposito(Deposito depositoAAgregar)
         {
             db.Depositos.Add(depositoAAgregar);
 
