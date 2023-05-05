@@ -1,4 +1,5 @@
 ﻿using CodigoComun.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,54 +10,67 @@ using System.Threading.Tasks;
 
 namespace CodigoComun.Repository
 {
-    public class DepositoRepository
-    {
-        private StockAppContext db = new StockAppContext();
+	public class DepositoRepository
+	{
+		private StockAppContext db = new StockAppContext();
 
-        public List<Deposito> GetTodosLosDepositos()
-        {
-            List<Deposito> depositoADevolver = new List<Deposito>();
-            depositoADevolver = db.Depositos.ToList();
+		public List<Deposito> GetTodosLosDepositos()
+		{
+			List<Deposito> depositoADevolver = new List<Deposito>();
+			depositoADevolver = db.Depositos.ToList();
 
-            return depositoADevolver;
-        }
+			return depositoADevolver;
+		}
 
-        public Deposito GetDepositoPorId(int idDeposito)
-        {
-            Deposito depositoADevolver = db.Depositos.Where(p => p.Id == idDeposito).FirstOrDefault();
+		public Deposito GetDepositoPorId(int idDeposito)
+		{
+			Deposito depositoADevolver = db.Depositos.Where(p => p.Id == idDeposito).FirstOrDefault();
 
-            return depositoADevolver;
-        }
+			return depositoADevolver;
+		}
 
-        public int EliminarDeposito(int idDepositoAEliminar)
-        {
-            Deposito depositoAEliminar = GetDepositoPorId(idDepositoAEliminar);
-            db.Depositos.Remove(depositoAEliminar);
+		public bool EliminarStockConArticulo(int depositoId)
+		{
+			var stockDeposito = db.Stocks.Where(p => p.IdDeposito == depositoId);
+			foreach (var stock in stockDeposito)
+			{
+				if (stock.IdArticulo != null && stock.Cantidad > 0)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 
-            int r = db.SaveChanges();
-            return r;
-        }
+		public int EliminarDeposito(int idDepositoAEliminar)
+		{
+			Deposito depositoAEliminar = GetDepositoPorId(idDepositoAEliminar);
+			db.Depositos.Remove(depositoAEliminar);
+
+			int r = db.SaveChanges();
+			return r;
+		}
 
 		public Deposito GetDepositoPorNombre(string nombreABuscar)
 		{
 			Deposito depositoNombre = db.Depositos.Where(p => p.Nombre == nombreABuscar).FirstOrDefault();
-            return depositoNombre;
+			return depositoNombre;
 		}
 
 		public int AddDeposito(Deposito depositoAAgregar)
-        {
-            db.Depositos.Add(depositoAAgregar);
+		{
+			db.Depositos.Add(depositoAAgregar);
 
-            int r = db.SaveChanges();
-            return r;
-        }
+			int r = db.SaveChanges();
+			return r;
+		}
 
-        public int UpdateDeposito(Deposito depositoAModificar)
-        {
-            db.Entry(depositoAModificar).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            return db.SaveChanges();
-        }
+		public int UpdateDeposito(Deposito depositoAModificar)
+		{
+			db.Entry(depositoAModificar).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+			return db.SaveChanges();
+		}
 
 
-    }
+	}
 }

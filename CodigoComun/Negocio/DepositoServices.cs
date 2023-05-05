@@ -84,7 +84,7 @@ namespace CodigoComun.Negocio
 			{
 				Deposito depositoEncontrado = depositoRepository.GetDepositoPorId(idDepositoDTO);
 
-				if (depositoEncontrado !=null)
+				if (depositoEncontrado != null)
 				{
 					deposito = depositoEncontrado.GetDepositoDTO(depositoEncontrado);
 					deposito.Mensaje = "Mostrar deposito";
@@ -102,7 +102,7 @@ namespace CodigoComun.Negocio
 				return deposito;
 			}
 		}
-		
+
 		public DepositoDTO ModificarDeposito(DepositoDTO depositoDTOAModificar)
 		{
 			try
@@ -134,19 +134,31 @@ namespace CodigoComun.Negocio
 		{
 			try
 			{
-				int r = depositoRepository.EliminarDeposito(depositoDTOAEliminar);
+				//verifico antes de eliminar
+				bool depositoAuxiliar = depositoRepository.EliminarStockConArticulo(depositoDTOAEliminar);
 
-				if (r == 1)
+				if (depositoAuxiliar == false)
 				{
-					deposito.Mensaje = "Deposito eliminado";
-					return deposito;
+					return new DepositoDTO
+					{
+						Mensaje = "No se puede eliminar el depósito porque tiene artículos asociados."
+					};
 				}
 				else
 				{
-					deposito.Mensaje = "No se pudo eliminar el deposito";
-					return deposito;
-				}
+					int r = depositoRepository.EliminarDeposito(depositoDTOAEliminar);
 
+					if (r == 1)
+					{
+						deposito.Mensaje = "Deposito eliminado";
+						return deposito;
+					}
+					else
+					{
+						deposito.Mensaje = "No se pudo eliminar el deposito";
+						return deposito;
+					}
+				}
 			}
 			catch (Exception ex)
 			{

@@ -135,6 +135,16 @@ namespace CodigoComun.Negocio
 			ArticuloDTO articuloDTOEliminado = new ArticuloDTO();
 			try
 			{
+				//verifico antes de eliminar
+				Articulo articuloAuxiliar = articuloRepository.stockArticulo(articuloAEliminar);
+
+				if (articuloAuxiliar != null)
+				{
+					articuloDTOEliminado.HuboError = true;
+					articuloDTOEliminado.Mensaje = $"No se puede eliminar un Articulo en Stock {articuloAuxiliar.Nombre}";
+					return articuloDTOEliminado;
+				}
+
 				int r = articuloRepository.DeleteArticuloDB(articuloAEliminar);
 				if (r == 1)
 				{
