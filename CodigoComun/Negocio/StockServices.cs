@@ -20,19 +20,28 @@ namespace CodigoComun.Negocio
 		{
 			try
 			{
-				Stock stock = stockDTOAAgregar.GetStock(stockDTOAAgregar);
-				int r = stockRepository.AddStock(stock);
+				bool stockAuxiliar = stockRepository.ExisteStock((int)stockDTOAAgregar.IdArticulo, (int)stockDTOAAgregar.IdDeposito);
 
-				if (r == 1)
+				if (stockAuxiliar == true)
 				{
-					stockDTOAAgregar.Mensaje = "Stock Agregado";
-					return stockDTOAAgregar;
+					return new StockDTO { Mensaje = "Ya existe el stock del artículo el depósito asignado" };
 				}
 				else
 				{
-					stockDTOAAgregar.HuboError = true;
-					stockDTOAAgregar.Mensaje = "No se pudo agregar el stock";
-					return stockDTOAAgregar;
+					Stock stock = stockDTOAAgregar.GetStock(stockDTOAAgregar);
+					int r = stockRepository.AddStock(stock);
+
+					if (r == 1)
+					{
+						stockDTOAAgregar.Mensaje = "Stock Agregado";
+						return stockDTOAAgregar;
+					}
+					else
+					{
+						stockDTOAAgregar.HuboError = true;
+						stockDTOAAgregar.Mensaje = "No se pudo agregar el stock";
+						return stockDTOAAgregar;
+					}
 				}
 			}
 			catch (Exception ex)

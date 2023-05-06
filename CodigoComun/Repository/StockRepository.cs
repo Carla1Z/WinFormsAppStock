@@ -27,7 +27,13 @@ namespace CodigoComun.Repository
             return stockADevolver;
         }
 
-        public int AddStock(Stock stock)
+		public bool ExisteStock(int idArticulo, int idDeposito)
+		{
+			return db.Stocks.Any(s => s.IdArticulo == idArticulo && s.IdDeposito == idDeposito);
+		}
+
+
+		public int AddStock(Stock stock)
         {
             db.Stocks.Add(stock);
             return db.SaveChanges();
