@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CodigoComun.Entities;
 using CodigoComun.Modelos;
+using CodigoComun.Modelos.DTO;
 using CodigoComun.Negocio;
 
 namespace WinFormsAppStock.Vistas
@@ -24,7 +25,7 @@ namespace WinFormsAppStock.Vistas
         private void CargarStocks()
         {
             StockServices services = new StockServices();
-            List<Stock> stocksEnLaDB = services.TodosLosStocks();
+            List<StockDTO> stocksEnLaDB = services.TodosLosStocks();
             gvStocks.DataSource = stocksEnLaDB;
             gvStocks.CellFormatting += gvStocks_CellFormatting;
         }
@@ -36,8 +37,8 @@ namespace WinFormsAppStock.Vistas
                 if (e.Value != null)
                 {
                     int idArticulo = (int)e.Value;
-                    Articulo articuloAuxiliar = new Articulo();
-                    Articulo articulo = articuloAuxiliar.GetArticuloPorId(idArticulo);
+                    ArticuloServices articuloAuxiliar = new ArticuloServices();
+                    ArticuloDTO articulo = articuloAuxiliar.ArticuloPorId(idArticulo);
                     e.Value = articulo.Nombre;
                 }
             }
@@ -47,7 +48,7 @@ namespace WinFormsAppStock.Vistas
                 {
                     int idDeposito = (int)e.Value;
                     DepositoServices depositoServices = new DepositoServices();
-                    Deposito deposito = depositoServices.depositoPorId(idDeposito);
+                    DepositoDTO deposito = depositoServices.depositoPorId(idDeposito);
                     e.Value = deposito.Nombre;
                 }
             }
@@ -71,9 +72,9 @@ namespace WinFormsAppStock.Vistas
             stockAuxiliar.Id = idStockEliminar;
 
             StockServices stockServices = new StockServices();
-            string mensaje = stockServices.EliminarStockSeleccionado(stockAuxiliar);
+            StockDTO mensaje = stockServices.EliminarStockSeleccionado(stockAuxiliar.Id);
 
-            if (mensaje == "Stock eliminado")
+            if (mensaje.Mensaje == "Stock eliminado")
             {
                 MessageBox.Show("Stock eliminado con exito");
             }
