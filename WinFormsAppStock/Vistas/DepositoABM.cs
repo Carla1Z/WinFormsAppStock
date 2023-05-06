@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CodigoComun.Entities;
+using CodigoComun.Modelos.DTO;
 using CodigoComun.Negocio;
 
 namespace WinFormsAppStock.Vistas
@@ -32,29 +33,29 @@ namespace WinFormsAppStock.Vistas
 
         private void AgregarDeposito()
         {
-            Deposito depositoAGuardar = new Deposito();
+            DepositoDTO depositoAGuardar = new DepositoDTO();
             depositoAGuardar.Capacidad = Convert.ToDecimal(txtCapacidad.Text);
             depositoAGuardar.Nombre = txtNombre.Text;
             depositoAGuardar.Direccion = txtDireccion.Text;
 
             DepositoServices depositoServices = new DepositoServices();
-            string mensaje = depositoServices.AgregarDeposito(depositoAGuardar);
+            DepositoDTO mensaje = depositoServices.AgregarDeposito(depositoAGuardar);
             
-            if (mensaje == "Deposito Agregado")
+            if (mensaje.Mensaje == "Deposito Agregado")
             {
                 MessageBox.Show("Deposito Agregado con exito");
                 this.Close();
             }
             else
             {
-                MessageBox.Show(mensaje);
+                MessageBox.Show(mensaje.Mensaje);
             }
         }
 
         private void CargarDatosDepositoParaModificar(int idDepositoAModificar)
         {
             DepositoServices services = new DepositoServices();
-            Deposito depositoAuxiliar = services.depositoPorId(idDepositoAModificar);
+            DepositoDTO depositoAuxiliar = services.depositoPorId(idDepositoAModificar);
 
 
             txtId.Text = depositoAuxiliar.Id.ToString();
@@ -66,23 +67,23 @@ namespace WinFormsAppStock.Vistas
 
         private void ModificarDeposito()
         {
-            Deposito DepositoAModificar = new Deposito();
+            DepositoDTO DepositoAModificar = new DepositoDTO();
             DepositoAModificar.Capacidad = Convert.ToDecimal(txtCapacidad.Text);
             DepositoAModificar.Nombre = txtNombre.Text;
             DepositoAModificar.Direccion = txtDireccion.Text;
             DepositoAModificar.Id = Convert.ToInt32(txtId.Text);
 
             DepositoServices depositoServices = new DepositoServices();
-            string mensaje = depositoServices.ModificarDeposito(DepositoAModificar);
+            DepositoDTO mensaje = depositoServices.ModificarDeposito(DepositoAModificar);
 
-            if (mensaje == "Deposito Modificado")
+            if (mensaje.Mensaje == "Deposito Modificado")
             {
                 MessageBox.Show("Deposito modificado con exito");
                 this.Close();
             }
             else
             {
-                MessageBox.Show(mensaje);
+                MessageBox.Show(mensaje.Mensaje);
             }
 
         }

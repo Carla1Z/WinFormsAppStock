@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CodigoComun.Modelos;
+using CodigoComun.Modelos.DTO;
 using CodigoComun.Negocio;
 
 namespace WinFormsAppStock.Vistas
@@ -22,8 +23,8 @@ namespace WinFormsAppStock.Vistas
 
         private void CargarArticulos()
         {
-            Articulo articuloAuxiliar = new Articulo();
-            List<Articulo> articulosEnLaDB = articuloAuxiliar.GetTodosLosArticulos();
+            ArticuloServices articuloAuxiliar = new ArticuloServices();
+            List<ArticuloDTO> articulosEnLaDB = articuloAuxiliar.TodosLosArticulos();
             gvArticulos.DataSource = articulosEnLaDB;
         }
 
@@ -45,15 +46,15 @@ namespace WinFormsAppStock.Vistas
             //articuloAuxiliar.Id = idArticuloEliminar;
 
             ArticuloServices articuloServices = new ArticuloServices();
-            string mensaje = articuloServices.EliminarArticulo(idArticuloEliminar);
+            ArticuloDTO mensaje = articuloServices.EliminarArticulo(idArticuloEliminar);
 
-            if (mensaje == "Articulo eliminado")
+            if (mensaje.Mensaje == "Articulo eliminado")
             {
                 MessageBox.Show("Articulo eliminado con exito");
             }
             else
             {
-                MessageBox.Show(mensaje);
+                MessageBox.Show(mensaje.Mensaje);
             }
         }
 

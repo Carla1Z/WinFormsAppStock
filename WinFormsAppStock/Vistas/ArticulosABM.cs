@@ -1,4 +1,5 @@
 ﻿using CodigoComun.Modelos;
+using CodigoComun.Modelos.DTO;
 using CodigoComun.Negocio;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace WinFormsAppStock.Vistas
 
         private void AgregarArticulo()
         {
-            Articulo articuloAGuardar = new Articulo();
+            ArticuloDTO articuloAGuardar = new ArticuloDTO();
             articuloAGuardar.Nombre = txtNombre.Text;
             articuloAGuardar.Marca = txtMarca.Text;
             articuloAGuardar.MinimoStock = Convert.ToDecimal(txtMinStock.Text);
@@ -42,24 +43,24 @@ namespace WinFormsAppStock.Vistas
 
             //instancio el servicio
             ArticuloServices articuloServices = new ArticuloServices();
-            string mensaje = articuloServices.AgregarArticulo(articuloAGuardar);
+            ArticuloDTO mensaje = articuloServices.AgregarArticulo(articuloAGuardar);
 
-            if (mensaje == "Articulo Agregado")
+            if (mensaje.Mensaje == "Articulo Agregado")
             {
                 MessageBox.Show("Articulo Agregado con exito");
                 this.Close();
             }
             else
             {
-                MessageBox.Show(mensaje);
+                MessageBox.Show(mensaje.Mensaje);
             }
         }
 
         private void CargarDatosArticuloParaModificar(int idArticuloAModificar)
         {
-            Articulo articuloAuxiliar = new Articulo();
-
-            Articulo articuloConDatosDeLaBaseDeDatos = articuloAuxiliar.GetArticuloPorId(idArticuloAModificar);
+            ArticuloServices articuloAuxiliar = new ArticuloServices();
+            
+            ArticuloDTO articuloConDatosDeLaBaseDeDatos = articuloAuxiliar.ArticuloPorId(idArticuloAModificar);
 
             txtId.Text = articuloConDatosDeLaBaseDeDatos.Id.ToString();
             txtNombre.Text = articuloConDatosDeLaBaseDeDatos.Nombre;
@@ -72,7 +73,7 @@ namespace WinFormsAppStock.Vistas
 
         private void ModificarArticulo()
         {
-            Articulo ArticuloAModificar = new Articulo();
+            ArticuloDTO ArticuloAModificar = new ArticuloDTO();
             ArticuloAModificar.Nombre = txtNombre.Text;
             ArticuloAModificar.Marca = txtMarca.Text;
             ArticuloAModificar.MinimoStock = Convert.ToDecimal(txtMinStock.Text);
@@ -82,16 +83,16 @@ namespace WinFormsAppStock.Vistas
             ArticuloAModificar.Id = Convert.ToInt32(txtId.Text);
 
             ArticuloServices articuloServices = new ArticuloServices();
-            string mensaje = articuloServices.ModificarArticulo(ArticuloAModificar);
+            ArticuloDTO mensaje = articuloServices.ModificarArticulo(ArticuloAModificar);
 
-            if (mensaje == "Articulo Modificado")
+            if (mensaje.Mensaje == "Articulo Modificado")
             {
                 MessageBox.Show("Articulo modificado con exito");
                 this.Close();
             }
             else
             {
-                MessageBox.Show(mensaje);
+                MessageBox.Show(mensaje.Mensaje);
             }
 
         }

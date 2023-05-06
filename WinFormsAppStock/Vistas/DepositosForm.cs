@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CodigoComun.Entities;
+using CodigoComun.Modelos.DTO;
 using CodigoComun.Negocio;
 
 namespace WinFormsAppStock.Vistas
@@ -42,15 +43,15 @@ namespace WinFormsAppStock.Vistas
             //depositoAuxiliar.Id = idDepositoEliminar;
 
             DepositoServices services = new DepositoServices();
-            string mensaje = services.EliminarDepositoSeleccionado(idDepositoEliminar);
+            DepositoDTO mensaje = services.EliminarDepositoSeleccionado(idDepositoEliminar);
 
-            if (mensaje == "Deposito eliminado")
+            if (mensaje.Mensaje == "Deposito eliminado")
             {
                 MessageBox.Show("Deposito eliminado con exito");
             }
             else
             {
-                MessageBox.Show(mensaje);
+                MessageBox.Show(mensaje.Mensaje);
             }
         }
 
