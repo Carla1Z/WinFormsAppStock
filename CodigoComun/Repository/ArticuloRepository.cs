@@ -16,8 +16,14 @@ namespace CodigoComun.Repository
 
 		public int AddArticuloDB(Articulo articuloAAgregar)
 		{
+			string minStockComaPorPunto = articuloAAgregar.MinimoStock.ToString();
+			minStockComaPorPunto = minStockComaPorPunto.Replace(",", ".");
+
+			string precioComaPorPunto = articuloAAgregar.Precio.ToString();
+			precioComaPorPunto = precioComaPorPunto.Replace(",", ".");
+
 			string query = $"insert into Articulos (Nombre, Marca, MinimoStock, Proveedor, Precio, Codigo)";
-			query += $"values('{articuloAAgregar.Nombre}', '{articuloAAgregar.Marca}', '{articuloAAgregar.MinimoStock}', '{articuloAAgregar.Proveedor}', '{articuloAAgregar.Precio}', '{articuloAAgregar.Codigo}') ";
+			query += $"values('{articuloAAgregar.Nombre}', '{articuloAAgregar.Marca}', '{minStockComaPorPunto}', '{articuloAAgregar.Proveedor}', '{precioComaPorPunto}', '{articuloAAgregar.Codigo}') ";
 			try
 			{
 				SqlCommand command = new SqlCommand(query);
