@@ -137,7 +137,7 @@ namespace CodigoComun.Negocio
 				//verifico antes de eliminar
 				bool depositoAuxiliar = depositoRepository.EliminarStockConArticulo(depositoDTOAEliminar);
 
-				if (depositoAuxiliar == false)
+				if (depositoAuxiliar == true)
 				{
 					return new DepositoDTO
 					{
